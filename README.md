@@ -1,17 +1,46 @@
-# tictactoe
+# Hangman — The Schoolhouse Edition
 
-A new Flutter project.
+The classic word-guessing game, rebuilt as a cozy schoolhouse: chalkboard,
+wooden gallows, chalk letters and paper letter-tiles. By WAJIHA.
 
-## Getting Started
+Package: `com.gameswajiha.hangman` · Repo: `wjia-n/game-hangman`
 
-This project is a starting point for a Flutter application.
+## Features
 
-A few resources to get you started if this is your first Flutter project:
+- **Solo word runs** — 3, 6, or 9 words per run (9 is Pro)
+- **3 difficulty tiers** — Easy (3–5 letters, 8 misses), Medium (6–8 letters,
+  6 misses), Hard (9–12 letters, 5 misses — Pro)
+- **Relaxed & Timed modes** — per-word countdown with audible final 10 seconds
+- **Animated gallows** — the chalk figure draws part-by-part with a
+  sketch-bounce pop; letters flip in with a staggered animation
+- **Engine-owned state machine + watchdog** — phases (dealing → guessing →
+  letterReveal → wordSettle → runOver); stuck states impossible by
+  construction; see RULES.md
+- **14 chalkboard themes + 9 chalk styles + custom theme creator** (Pro)
+- **Renameable player**, persisted as one order-preserving JSON string
+  (`hangman_player_names_json`) — saved on every keystroke
+- **Synthesized audio** — menu music + gameplay BGM + chalk/wood/paper SFX,
+  cached clips, busy-guard, pause/resume on lifecycle, prewarm on splash
+- **Pro screen** — Free-vs-Pro comparison, real Play Billing
+  (`hangmanpro` one-time, `hangmancoffee` / `hangmanchocolate` consumable
+  tips), graceful when unconfigured
+- **Share + in-app review** with the real Play Store URL
+- **Splash flow** — WAJIHA company moment → game splash (logo + animated
+  loading line + Credits: WAJIHA)
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## Build
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```sh
+flutter pub get
+flutter analyze
+flutter test
+flutter build apk --release
+flutter build appbundle --release
+```
+
+Release signing is wired through the repo's `build.yml` workflow
+(`UPLOAD_KEYSTORE_BASE64` / `UPLOAD_KEYSTORE_PASSWORD` / `UPLOAD_KEY_ALIAS` /
+`UPLOAD_KEY_PASSWORD` secrets). Store products (`hangmanpro`,
+`hangmancoffee`, `hangmanchocolate`) must be created in Play Console —
+until then the Pro screen shows an honest "available after store setup"
+state.

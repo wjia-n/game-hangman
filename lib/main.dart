@@ -1,25 +1,75 @@
 import 'package:flutter/material.dart';
-import 'package:wajiha_game_core/wajiha_game_core.dart';
-import 'game_screen.dart';
+import 'package:flutter/services.dart';
+import 'screens/splash_screen.dart';
+import 'services/audio_service.dart';
+import 'services/settings_service.dart';
+import 'theme/chalk_themes.dart';
+import 'theme/schoolhouse.dart';
 
-void main() => runApp(const HangmanApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  final settings = SchoolSettings();
+  await settings.load();
+  final audio = SchoolAudio();
+  audio.configure(
+    musicOn: settings.musicOn,
+    sfxOn: settings.sfxOn,
+    volume: settings.volume,
+  );
+  runApp(HangmanApp(settings: settings, audio: audio));
+}
 
-class HangmanApp extends StatelessWidget {
-  const HangmanApp({super.key});
+class HangmanApp extends StatefulWidget {
+  final SchoolSettings settings;
+  final SchoolAudio audio;
+  const HangmanApp({super.key, required this.settings, required this.audio});
+
+  @override
+  State<HangmanApp> createState() => _HangmanAppState();
+}
+
+class _HangmanAppState extends State<HangmanApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    widget.audio.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Pause (not stop) on interruption so music resumes exactly where it
+    // left off; the game screen additionally freezes its engine.
+    if (state == AppLifecycleState.paused) {
+      widget.audio.onAppPaused();
+    } else if (state == AppLifecycleState.resumed) {
+      widget.audio.onAppResumed();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GameShell(
-      variant: ShellVariant.neonArcade,
-      title: 'Hangman',
-      tagline: 'Guess the word before the stick figure runs out of luck! 🪢',
-      emoji: '🪢',
-      slug: 'hangman',
-      howToPlay:
-          '• A secret word is picked — the category hint is your lifeline.\n• Tap letters to guess. Right ones fill the blanks!\n• 6 wrong guesses and the drawing is complete… game over for that word.\n• Solve as many of the 6 words as you can. You got this! 🧠',
-      playerOptions: const [1],
-      supportsBots: false,
-      gameBuilder: (ctx, players, cb) => HangmanScreen(players: players, callbacks: cb),
+    return ListenableBuilder(
+      listenable: widget.settings,
+      builder: (_, _) => MaterialApp(
+        title: 'Hangman',
+        debugShowCheckedModeBanner: false,
+        theme: School.theme(ChalkThemes.byId(
+          widget.settings.themeId,
+          custom: widget.settings.customTheme,
+        )),
+        home: SplashScreen(audio: widget.audio, settings: widget.settings),
+      ),
     );
   }
 }
