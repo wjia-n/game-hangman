@@ -69,7 +69,7 @@ class SchoolSettings extends ChangeNotifier {
   int wordsSolved = 0;
   int bestStreak = 0;
   int runsCleared = 0;
-  bool isPro = false;
+  bool isPro = true; // everything unlocked — no Pro version
 
   /// Custom theme colors (ARGB ints). Defaults mirror the Classic Chalkboard.
   Map<String, int> customColors = Map.of(_defaultCustomColors);

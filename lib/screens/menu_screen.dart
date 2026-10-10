@@ -39,21 +39,12 @@ class _MenuScreenState extends State<MenuScreen> {
     super.initState();
     _store = StoreService();
     _store.init();
-    _store.proPurchased.addListener(_onPro);
     widget.audio.startMenuMusic();
   }
 
-  void _onPro() {
-    if (_store.proPurchased.value && mounted) {
-      _s.setPro(true);
-      _store.proPurchased.value = false;
-      setState(() {});
-    }
-  }
-
+  
   @override
   void dispose() {
-    _store.proPurchased.removeListener(_onPro);
     _store.dispose();
     super.dispose();
   }
