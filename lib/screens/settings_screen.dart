@@ -3,6 +3,7 @@ import '../services/audio_service.dart';
 import '../services/settings_service.dart';
 import '../theme/chalk_themes.dart';
 import '../theme/schoolhouse.dart';
+import '../transfer/transfer_ui.dart';
 
 /// Settings: music/SFX toggles, volume, lifetime stats.
 class SettingsScreen extends StatelessWidget {
@@ -43,6 +44,7 @@ class SettingsScreen extends StatelessWidget {
               padding:
                   const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
               children: [
+              TransferSaveTile(gameSlug: 'hangman'),
                 Text('Sound', style: School.label(15, theme: t)),
                 const SizedBox(height: 6),
                 SettingRow(
