@@ -59,7 +59,7 @@ class StoreService {
         error = 'Store unavailable on this device';
         return;
       }
-      _sub = _iap.purchaseStream.listen(
+      _sub = _iap!.purchaseStream.listen(
         _onPurchases,
         onError: (_) {},
         cancelOnError: false,
