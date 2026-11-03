@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:share_plus/share_plus.dart';
@@ -364,7 +365,7 @@ class _MenuScreenState extends State<MenuScreen> {
                       _MenuIcon(
                         theme: t,
                         icon: _s.isPro ? Icons.star : Icons.lock_open,
-                        label: _s.isPro ? 'PRO ✓' : 'PRO',
+                        label: defaultTargetPlatform == TargetPlatform.iOS ? '⭐ Gold Star' : (_s.isPro ? 'PRO ✓' : 'PRO'),
                         onTap: _openPro,
                       ),
                       const SizedBox(width: 22),
