@@ -297,7 +297,7 @@ class _MenuScreenState extends State<MenuScreen> {
                           child: _ModeChip(
                             theme: t,
                             label: '$n',
-                            sub: n == 9 ? 'Pro' : null,
+                            sub: n == 9 && defaultTargetPlatform != TargetPlatform.iOS ? 'Pro' : null,
                             selected: _s.wordsPerRun == n,
                             locked: n == 9 && !_s.isPro,
                             onTap: () {
